@@ -1,0 +1,122 @@
+generated: '2026-09-04'
+method: derived
+source: mcp/willie-s-reserve-mcp-tools-list.json, https://williesreserve.com/agents.md, https://williesreserve.com/robots.txt
+description: >-
+  Cross-cutting runtime semantics for the Willie's Reserve UCP/MCP commerce surface, derived from
+  the live tools/list schemas and the store's own agent-facing documents. There is no OpenAPI to
+  read, so every statement below is grounded in a schema field or a sentence the store publishes.
+auth_style:
+  discovery: anonymous
+  transact: buyer-approved payment instrument
+  note: >-
+    tools/list requires no credential. Payment instruments are supplied per checkout via
+    checkout.payment.instruments, and completion requires contemporaneous human approval.
+  see: authentication/willie-s-reserve-authentication.yml
+transport:
+  protocol: JSON-RPC 2.0 over HTTPS POST (MCP streamable-http)
+  endpoint: https://williesreserve.com/api/ucp/mcp
+  content_type: application/json
+  accept: application/json, text/event-stream
+  required_meta:
+    field: meta.ucp-agent.profile
+    type: string (uri)
+    note: Every one of the 13 tools requires a meta object carrying a ucp-agent.profile URI for UCP agent-profile discovery.
+idempotency:
+  supported: true
+  coverage: partial
+  scope:
+  - complete_checkout
+  mechanism: meta.idempotency-key (string) on the complete_checkout tool
+  retention: not stated
+  note: >-
+    Exactly one of the seven mutating tools accepts an idempotency key, and it is the one where a
+    duplicate costs real money — complete_checkout. create_cart, update_cart, cancel_cart,
+    create_checkout, update_checkout and cancel_checkout accept no key, so a retried call on any
+    of those is not replay-protected by the contract.
+  evidence: mcp/willie-s-reserve-mcp-tools-list.json — complete_checkout.inputSchema.properties.meta.properties.idempotency-key
+reversibility:
+  applicable: true
+  grade: documented
+  note: >-
+    Cancellation exists as a first-class tool for both write surfaces, but no document the store
+    publishes states a window inside which cancellation still works, so this grades as documented
+    rather than verified. No window is asserted here because none is published.
+  surfaces:
+  - write_operation: create_checkout / update_checkout / complete_checkout
+    reversal_operation: cancel_checkout
+    window: not stated
+    docs: https://williesreserve.com/agents.md
+    note: >-
+      cancel_checkout is described only as "Cancels a checkout." Whether it remains available after
+      complete_checkout succeeds is not documented; refund/return handling is not exposed as a tool.
+  - write_operation: create_cart / update_cart
+    reversal_operation: cancel_cart
+    window: not stated
+    docs: https://williesreserve.com/agents.md
+  - write_operation: complete_checkout (payment capture)
+    reversal_operation: none exposed
+    window: not stated
+    note: >-
+      No refund, void or return tool is present in tools/list. Once a checkout is completed the
+      agent-facing surface offers read-only get_order; reversal is a human/support path.
+dry_run_mode:
+  supported: false
+  note: No test mode, simulation flag or sandbox tool is exposed by the endpoint.
+pagination:
+  style: cursor
+  request_param: pagination.cursor
+  response_field: pagination.cursor
+  applies_to:
+  - search_catalog
+  note: search_catalog limits initial results and returns a cursor for subsequent pages.
+versioning:
+  style: dated protocol versions
+  current: '2026-08-25'
+  supported:
+  - '2026-08-25'
+  - '2026-04-08'
+  - '2026-01-23'
+  negotiation: >-
+    UCP version is selected via the /.well-known/ucp profile's supported_versions map; the MCP
+    layer negotiates its own protocolVersion during initialize (observed 2024-11-05).
+  see: lifecycle/willie-s-reserve-lifecycle.yml
+errors:
+  envelope: JSON-RPC 2.0 error object
+  problem_json: false
+  catalog_published: false
+  note: >-
+    No error-code reference is published for this surface, so no errors/ artifact is written — an
+    honest absence rather than a derived list.
+rate_limit_signaling:
+  documented: true
+  headers_observed: none
+  status_on_exhaustion: 429
+  note: >-
+    llms.txt states the MCP endpoint is rate-limited per IP and instructs agents to back off on 429.
+    No RateLimit-* or Retry-After header was present on a successful response, and no numeric limit
+    is published.
+  see: rate-limits/willie-s-reserve-rate-limits.yml
+money:
+  representation: ISO 4217 minor units
+  shape: '{"amount": <integer>, "currency": "<code>"}'
+  note: Repeated in every tool description; agents must divide by 100 for two-decimal currencies before quoting a buyer.
+localization:
+  context_fields:
+  - context.address_country
+  - context.address_region
+  - context.postal_code
+  - context.currency
+  - context.language
+  note: agents.md instructs agents to pass address_country and currency for accurate pricing and availability.
+request_tracing:
+  header: x-request-id
+  observed: true
+  note: Observed on a live MCP response; not documented by the provider.
+human_in_the_loop:
+  required: true
+  scope: checkout, payment, order placement
+  source: https://williesreserve.com/robots.txt
+  note: >-
+    The store's robots.txt and llms.txt both forbid scripted or automated completion of payment
+    without explicit, contemporaneous human approval. This is a published agent-governance rule,
+    not an inference.

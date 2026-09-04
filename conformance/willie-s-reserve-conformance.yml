@@ -1,0 +1,100 @@
+generated: '2026-09-04'
+method: probed
+source: https://williesreserve.com/.well-known/ucp
+description: >-
+  Cross-cutting and domain-standard conformance asserted from documents the store itself serves —
+  the UCP merchant profile, the OpenID Connect discovery document, and a live MCP initialize /
+  tools/list exchange. Nothing here is inferred from marketing prose.
+conformance:
+- id: oauth2
+  conforms: true
+  evidence: https://williesreserve.com/.well-known/oauth-authorization-server
+  note: RFC 8414 authorization-server metadata served on the store's own domain, with PKCE S256 and authorization_code + refresh_token grants.
+- id: oidc
+  conforms: true
+  evidence: https://williesreserve.com/.well-known/openid-configuration
+  note: OpenID Connect Discovery 1.0 document; RS256 id_token signing, standard claim set.
+- id: rfc8414
+  conforms: true
+  evidence: https://williesreserve.com/.well-known/oauth-authorization-server
+- id: pkce
+  conforms: true
+  evidence: https://williesreserve.com/.well-known/openid-configuration
+  note: code_challenge_methods_supported = ["S256"].
+- id: jsonrpc-2.0
+  conforms: true
+  evidence: https://williesreserve.com/api/ucp/mcp
+  note: MCP endpoint answers JSON-RPC 2.0 requests; initialize and tools/list both returned {"jsonrpc":"2.0"} envelopes.
+- id: mcp
+  conforms: true
+  evidence: https://williesreserve.com/api/ucp/mcp
+  note: >-
+    Model Context Protocol, negotiated protocolVersion 2024-11-05, serverInfo
+    universal-commerce/0.1.0, capabilities tools/prompts/resources/logging.
+- id: json-schema-2020-12
+  conforms: true
+  evidence: mcp/willie-s-reserve-mcp-tools-list.json
+  note: Every tool inputSchema declares $schema https://json-schema.org/draft/2020-12/schema.
+- id: iso4217
+  conforms: true
+  evidence: mcp/willie-s-reserve-mcp-tools-list.json
+  note: Money is expressed as ISO 4217 minor units paired with a currency code across all tools.
+- id: iso3166-1-alpha-2
+  conforms: true
+  evidence: mcp/willie-s-reserve-mcp-tools-list.json
+  note: Address country fields are specified as 2-letter ISO 3166-1 alpha-2.
+- id: bcp47
+  conforms: true
+  evidence: mcp/willie-s-reserve-mcp-tools-list.json
+  note: context.language is specified as an IETF BCP 47 language tag.
+- id: rfc9457
+  conforms: false
+  evidence: https://williesreserve.com/api/ucp/mcp
+  note: Errors travel in JSON-RPC error objects, not application/problem+json.
+- id: pagination
+  conforms: true
+  evidence: mcp/willie-s-reserve-mcp-tools-list.json
+  note: search_catalog returns pagination.cursor for subsequent pages.
+- id: idempotency
+  conforms: partial
+  evidence: mcp/willie-s-reserve-mcp-tools-list.json
+  note: meta.idempotency-key is accepted by complete_checkout only; the other six mutating tools accept no key.
+domain_standard:
+- id: ucp
+  name: Universal Commerce Protocol
+  conforms: true
+  version: '2026-08-25'
+  spec: https://ucp.dev/2026-08-25/specification/overview/
+  evidence: https://williesreserve.com/.well-known/ucp
+  declared_in: /.well-known/ucp — services["dev.ucp.shopping"] and the capabilities block
+  supported_versions:
+  - '2026-08-25'
+  - '2026-04-08'
+  - '2026-01-23'
+  capabilities:
+  - dev.ucp.shopping.cart
+  - dev.ucp.shopping.checkout
+  - dev.ucp.shopping.fulfillment
+  - dev.ucp.shopping.discount
+  - dev.ucp.shopping.order
+  - dev.ucp.shopping.catalog.search
+  - dev.ucp.shopping.catalog.lookup
+  - dev.shopify.catalog
+  payment_handlers:
+  - id: com.google.pay
+    version: '2026-01-11'
+    card_networks: [VISA, MASTERCARD, AMEX, DISCOVER]
+  - id: dev.shopify.card
+    version: '2026-01-15'
+    card_brands: [visa, master, american_express, discover, diners_club]
+  note: >-
+    This is the domain standard for agent-driven retail commerce, and the store declares it in a
+    machine-readable profile rather than claiming it in prose: an agent that already speaks UCP
+    can transact here with no bespoke connector.
+compliance:
+  certifications: []
+  note: >-
+    No trust center, SOC 2 / ISO 27001 / PCI claim or compliance page was found on the store's own
+    surface; card handling is delegated to the platform's payment handlers. No Compliance pointer
+    is emitted.
+checked: '2026-09-04'

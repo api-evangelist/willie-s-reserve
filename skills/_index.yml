@@ -1,0 +1,27 @@
+generated: '2026-09-04'
+method: searched
+source: https://williesreserve.com/agents.md
+description: >-
+  Agent-facing operating instructions for Willie's Reserve. The store publishes its own agent
+  document at /agents.md (mirrored at /llms.txt and announced from robots.txt and a dedicated
+  agentic-discovery sitemap); that document is saved verbatim. One packaged skill is generated on
+  top of it, grounded entirely in tool names read from a live MCP tools/list call.
+skills:
+- name: willie-s-reserve-agents
+  file: skills/willie-s-reserve-agents.md
+  method: searched
+  source: https://williesreserve.com/agents.md
+  http_status: 200
+  fetched: '2026-09-04'
+  verbatim: true
+  summary: >-
+    The store's own canonical agent instructions — UCP discovery and MCP endpoint, the typical
+    agent flow, buyer-approval rules, read-only browsing paths and store policies.
+- name: willie-s-reserve-agent-purchase
+  file: skills/willie-s-reserve-agent-purchase.md
+  method: generated
+  source: mcp/willie-s-reserve-mcp-tools-list.json
+  summary: >-
+    Intent-to-checkout flow over the live UCP/MCP endpoint, with the store's human-approval rule,
+    the partial idempotency coverage and the absence of any refund path stated explicitly.
+  operations_grounded_in: live MCP tools/list, 2026-09-04

@@ -1,23 +1,115 @@
 aid: willie-s-reserve
 name: Willie's Reserve
-description: 'Willie''s Reserve is a company surfaced via the API Evangelist harvest backlog (source:
-  secondary-market) and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Willie's Reserve is the cannabis brand founded around Willie Nelson's name and legacy, selling
+  premium cannabis products direct to consumers from williesreserve.com. It is a consumer products
+  company rather than a software vendor, and it publishes no developer program, no OpenAPI and no
+  SDKs. It does, however, operate a real and unusually complete agent commerce surface: a live,
+  anonymously reachable Model Context Protocol endpoint at /api/ucp/mcp implementing the Universal
+  Commerce Protocol shopping service, a machine-readable UCP merchant profile at /.well-known/ucp,
+  an /agents.md instruction document mirrored at /llms.txt, a dedicated agentic-discovery sitemap,
+  and robots.txt policy language requiring human approval before any agent completes a payment.
+image: https://williesreserve.com/cdn/shop/files/Willies_Reserve_Logo_Registered_3b1bc386-c7d8-4a5e-bba7-06a4c76be9e4.png?v=1773762321
 url: https://raw.githubusercontent.com/api-evangelist/willie-s-reserve/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment
 specificationVersion: '0.20'
 created: '2026-09-04'
 modified: '2026-09-04'
 tags:
 - Company
-apis: []
+- Cannabis
+- Consumer Products
+- Retail
+- Ecommerce
+- Agent Commerce
+- Model Context Protocol
+- Universal Commerce Protocol
+- Shopify
+apis:
+- name: Willie's Reserve Commerce Agent API (UCP/MCP)
+  description: >-
+    A live Model Context Protocol server implementing the Universal Commerce Protocol shopping
+    service for the Willie's Reserve store. Thirteen tools cover catalog search and lookup, cart
+    lifecycle, checkout lifecycle and order retrieval. Discovery and tools/list are anonymous;
+    payment requires a buyer-approved instrument and explicit human approval at completion.
+  humanURL: https://williesreserve.com/agents.md
+  baseURL: https://williesreserve.com/api/ucp/mcp
+  image: https://williesreserve.com/cdn/shop/files/Willies_Reserve_Logo_Registered_3b1bc386-c7d8-4a5e-bba7-06a4c76be9e4.png?v=1773762321
+  tags:
+  - Agent Commerce
+  - Model Context Protocol
+  - Universal Commerce Protocol
+  - Ecommerce
+  - Catalog
+  - Cart
+  - Checkout
+  - Orders
+  properties:
+  - type: MCPServer
+    url: mcp/willie-s-reserve-mcp.yml
+  - type: Documentation
+    url: https://williesreserve.com/agents.md
+  - type: Conventions
+    url: conventions/willie-s-reserve-conventions.yml
+  - type: Idempotency
+    url: conventions/willie-s-reserve-conventions.yml
+  - type: DataModel
+    url: data-model/willie-s-reserve-data-model.yml
+  - type: RateLimits
+    url: rate-limits/willie-s-reserve-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/willie-s-reserve-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/willie-s-reserve_stock/
+  url: https://williesreserve.com/
+- type: Documentation
+  url: https://williesreserve.com/agents.md
+- type: MCPServer
+  url: mcp/willie-s-reserve-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/willie-s-reserve-llms.txt
+- type: WellKnown
+  url: well-known/willie-s-reserve-well-known.yml
+- type: Authentication
+  url: authentication/willie-s-reserve-authentication.yml
+- type: OAuthScopes
+  url: scopes/willie-s-reserve-scopes.yml
+- type: Conformance
+  url: conformance/willie-s-reserve-conformance.yml
+- type: Conventions
+  url: conventions/willie-s-reserve-conventions.yml
+- type: Idempotency
+  url: conventions/willie-s-reserve-conventions.yml
+- type: DataModel
+  url: data-model/willie-s-reserve-data-model.yml
+- type: Lifecycle
+  url: lifecycle/willie-s-reserve-lifecycle.yml
+- type: RateLimits
+  url: rate-limits/willie-s-reserve-rate-limits.yml
+- type: Plans
+  url: plans/willie-s-reserve-plans-pricing.yml
+- type: Support
+  url: https://williesreserve.com/pages/contact
+- type: Blog
+  url: https://williesreserve.com/blogs/news
+- type: TermsOfService
+  url: https://williesreserve.com/policies/terms-of-service
+- type: PrivacyPolicy
+  url: https://williesreserve.com/policies/privacy-policy
+position: Producing
+
+x-enrichment:
+  date: '2026-09-04'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v3

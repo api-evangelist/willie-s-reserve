@@ -1,0 +1,41 @@
+generated: '2026-09-04'
+method: probed
+source: https://williesreserve.com/.well-known/ucp
+description: >-
+  Versioning and lifecycle posture for the Willie's Reserve agent commerce surface. The store
+  publishes a dated, multi-version protocol profile — three UCP versions are simultaneously
+  addressable — but no status page, SLA, deprecation policy or changelog of its own.
+versioning:
+  scheme: dated protocol versions (YYYY-MM-DD)
+  current: '2026-08-25'
+  supported:
+  - version: '2026-08-25'
+    status: current
+    profile: https://williesreserve.com/.well-known/ucp
+  - version: '2026-04-08'
+    status: supported
+    profile: https://5qwrii-j7.myshopify.com/.well-known/ucp/2026-04-08
+  - version: '2026-01-23'
+    status: supported
+    profile: https://5qwrii-j7.myshopify.com/.well-known/ucp/2026-01-23
+  mcp_protocol_version: '2024-11-05'
+  note: >-
+    Older versions remain individually addressable at their own profile URLs, which is a real
+    version-coexistence guarantee even though no written policy accompanies it.
+deprecation_policy:
+  published: false
+  sunset_header: not observed
+  deprecation_header: not observed
+  note: No deprecation or sunset policy is published by this store. No Deprecation pointer is emitted.
+status_page:
+  published: false
+  note: No status page was found on the store's own domain. No StatusPage pointer is emitted.
+sla:
+  published: false
+changelog:
+  published: false
+  note: >-
+    No dated changelog exists for this surface; version movement is visible only as new dated UCP
+    versions appearing in the merchant profile. No ChangeLog pointer is emitted.
+deprecated_operations: []
+checked: '2026-09-04'

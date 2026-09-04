@@ -1,0 +1,29 @@
+generated: '2026-09-04'
+method: searched
+source: https://williesreserve.com/llms.txt
+description: >-
+  The store documents that its agent commerce endpoint is rate limited, but publishes no numeric
+  limit, window or burst, and returned no RateLimit-* or Retry-After header on a successful
+  probe. The only runtime signal an agent can rely on is the 429 status.
+limit_count: 0
+limits: []
+signaling:
+  status_on_exhaustion: 429
+  headers_documented: []
+  headers_observed: []
+  retry_guidance: 'Back off on 429 responses.'
+  observed_response_headers:
+  - x-request-id
+scope: per-IP
+endpoint: https://williesreserve.com/api/ucp/mcp
+evidence:
+- url: https://williesreserve.com/llms.txt
+  status: 200
+  quote: '**Respect rate limits.** The MCP endpoint is rate-limited per IP. Back off on 429 responses.'
+- url: https://williesreserve.com/api/ucp/mcp
+  status: 200
+  note: POST tools/list returned 200 with no rate-limit headers of any kind.
+note: >-
+  limit_count is an honest zero: a limit is asserted by the provider but no number is published,
+  so an agent cannot budget against it and can only react to a 429 after the fact.
+checked: '2026-09-04'

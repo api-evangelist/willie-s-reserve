@@ -1,0 +1,103 @@
+generated: '2026-09-04'
+method: derived
+source: mcp/willie-s-reserve-mcp-tools-list.json
+description: >-
+  Entity graph derived from the JSON Schemas the live MCP endpoint returns for its 13 tools. There
+  is no OpenAPI and no published object reference, so every entity and field below is read from a
+  tool inputSchema; nothing is inferred from a schema this store does not serve.
+id_format:
+  style: Shopify GID
+  examples:
+  - 'gid://shopify/Checkout/abc123'
+  - 'gid://shopify/Cart/abc123?key=secret'
+  note: Cart ids carry a secret query parameter, so a cart id is itself a capability token.
+entities:
+- name: Product
+  read_by: [search_catalog, lookup_catalog, get_product]
+  note: Storefront catalog product; matched by natural-language query or by identifier.
+- name: ProductVariant
+  note: The purchasable unit; a line item references a variant by id (line_items[].item.id).
+- name: Cart
+  created_by: create_cart
+  read_by: get_cart
+  updated_by: update_cart
+  cancelled_by: cancel_cart
+  fields: [id, line_items, buyer, context, discounts, attribution]
+- name: Checkout
+  created_by: create_checkout
+  read_by: get_checkout
+  updated_by: update_checkout
+  completed_by: complete_checkout
+  cancelled_by: cancel_checkout
+  fields: [id, line_items, buyer, context, payment, fulfillment, discounts, attribution, cart_id]
+- name: LineItem
+  fields: [id, quantity, item.id]
+- name: Buyer
+  fields: [email, phone_number]
+- name: PaymentInstrument
+  fields: [id, handler_id, type, billing_address, credential, display, selected]
+  note: Apple Pay instruments require billing_address and an apple_pay_token credential; other handlers require credential.token + credential.type.
+- name: Address
+  fields: [street_address, extended_address, address_locality, address_region, postal_code, address_country, first_name, last_name, phone_number]
+  used_as: [billing_address, fulfillment destination]
+- name: FulfillmentMethod
+  fields: [id, type, line_item_ids, selected_destination_id, destinations, groups]
+- name: Discount
+  fields: [codes]
+  note: Codes are case-insensitive and replace previously submitted codes; an empty array clears them.
+- name: Order
+  read_by: get_order
+- name: Money
+  fields: [amount, currency]
+  note: amount is an integer in ISO 4217 minor units.
+- name: AgentContext
+  fields: [address_country, address_region, postal_code, intent, language, currency, eligibility]
+- name: Attribution
+  fields: [referring_domain, click_id_tag, click_id_value, activity_id_tag, activity_id_value, utm_campaign, utm_source, utm_medium, utm_content, utm_term]
+relationships:
+- from: Cart
+  to: LineItem
+  type: has_many
+  via: line_items
+- from: Checkout
+  to: LineItem
+  type: has_many
+  via: line_items
+- from: Checkout
+  to: Cart
+  type: belongs_to
+  via: cart_id
+  note: When cart_id is supplied, cart contents win over overlapping fields in the checkout payload.
+- from: LineItem
+  to: ProductVariant
+  type: belongs_to
+  via: item.id
+- from: Checkout
+  to: Buyer
+  type: has_one
+  via: buyer
+- from: Checkout
+  to: PaymentInstrument
+  type: has_many
+  via: payment.instruments
+- from: PaymentInstrument
+  to: Address
+  type: has_one
+  via: billing_address
+- from: Checkout
+  to: FulfillmentMethod
+  type: has_many
+  via: fulfillment.methods
+- from: FulfillmentMethod
+  to: Address
+  type: has_many
+  via: destinations
+- from: Checkout
+  to: Discount
+  type: has_one
+  via: discounts
+- from: Checkout
+  to: Order
+  type: has_one
+  via: complete_checkout
+  note: Completing a checkout yields an order readable through get_order.

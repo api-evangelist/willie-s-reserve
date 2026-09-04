@@ -1,0 +1,66 @@
+generated: '2026-09-04'
+method: probed
+source: https://williesreserve.com/.well-known/openid-configuration
+description: >-
+  Willie's Reserve exposes two distinct authentication postures. The UCP/MCP commerce endpoint is
+  anonymous — a tools/list call with no credentials returned the full tool set — while the
+  customer-account surface is an OpenID Connect provider whose discovery document is served from
+  the store's own domain and issued by Shopify on the store's behalf.
+surfaces:
+- name: UCP / MCP commerce endpoint
+  endpoint: https://williesreserve.com/api/ucp/mcp
+  scheme: none
+  type: anonymous
+  verified: probed
+  http_status: 200
+  note: >-
+    No Authorization header was sent and the server returned the full 13-tool manifest. Payment
+    still requires a buyer-approved payment instrument and explicit human approval at completion,
+    so anonymous discovery does not imply anonymous purchase.
+- name: Customer Accounts (OpenID Connect)
+  scheme: openIdConnect
+  type: oauth2
+  verified: probed
+  discovery:
+    openid_configuration: https://williesreserve.com/.well-known/openid-configuration
+    oauth_authorization_server: https://williesreserve.com/.well-known/oauth-authorization-server
+    status: 200
+  issuer: https://shopify.com/authentication/59591163950
+  authorization_endpoint: https://shopify.com/authentication/59591163950/oauth/authorize
+  token_endpoint: https://shopify.com/authentication/59591163950/oauth/token
+  end_session_endpoint: https://shopify.com/authentication/59591163950/logout
+  jwks_uri: https://shopify.com/authentication/59591163950/.well-known/jwks.json
+  grant_types:
+  - authorization_code
+  - refresh_token
+  - urn:ietf:params:oauth:grant-type:jwt-bearer
+  response_types:
+  - code
+  token_endpoint_auth_methods:
+  - client_secret_basic
+  - client_secret_post
+  pkce:
+    supported: true
+    code_challenge_methods:
+    - S256
+  id_token_signing_alg:
+  - RS256
+  subject_types:
+  - public
+  claims:
+  - iss
+  - sub
+  - aud
+  - exp
+  - iat
+  - nonce
+  - sid
+  - email
+  - email_verified
+  note: >-
+    The issuer is a Shopify-hosted authentication tenant keyed to this store's shop id
+    (59591163950); the discovery documents are served from williesreserve.com, which is why they
+    are recorded here rather than treated as a third party's.
+files:
+  openid_configuration: well-known/willie-s-reserve-openid-configuration.json
+  oauth_authorization_server: well-known/willie-s-reserve-oauth-authorization-server.json

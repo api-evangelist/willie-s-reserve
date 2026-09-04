@@ -1,0 +1,135 @@
+generated: '2026-09-04'
+method: probed
+source: https://williesreserve.com/api/ucp/mcp
+name: Willie's Reserve Commerce MCP Server (UCP)
+slug: willie-s-reserve-mcp
+status: live
+description: >-
+  Willie's Reserve serves a live, anonymously reachable Model Context Protocol server at
+  https://williesreserve.com/api/ucp/mcp implementing the Universal Commerce Protocol (UCP)
+  shopping service. A tools/list call returned 13 real tools with full JSON Schema inputs
+  covering catalog search and lookup, cart lifecycle, checkout lifecycle and order retrieval
+  for this store's own product catalog.
+ownership:
+  note: >-
+    The endpoint is provisioned by Shopify (serverInfo.name "universal-commerce") but it is
+    store-scoped and served from the company's own domain. The UCP merchant profile at
+    /.well-known/ucp names merchant_name "Willie's Reserve", merchant_origin
+    "williesreserve.com" and gatewayMerchantId 59591163950 (the same shop id the storefront
+    reports), so the surface belongs to this company even though the runtime is platform code.
+  evidence: https://williesreserve.com/.well-known/ucp
+deployment:
+  mode: remote
+  endpoint: https://williesreserve.com/api/ucp/mcp
+  install: null
+  package: null
+  auth: none
+  verified: probed
+protocol:
+  jsonrpc: '2.0'
+  mcp_protocol_version: '2024-11-05'
+  server_info:
+    name: universal-commerce
+    version: 0.1.0
+  server_capabilities:
+    tools:
+      listChanged: true
+    prompts:
+      listChanged: true
+    resources:
+      listChanged: true
+    logging: {}
+  transport: streamable-http
+  content_type: application/json
+  accept: application/json, text/event-stream
+  method: POST only
+  get_behavior: >-
+    A plain GET on the endpoint returns the storefront's HTML 404 page. The endpoint answers only
+    JSON-RPC POSTs; a liveness check that uses GET will read as dead and is wrong.
+discovery:
+  ucp_profile: https://williesreserve.com/.well-known/ucp
+  agents_md: https://williesreserve.com/agents.md
+  llms_txt: https://williesreserve.com/llms.txt
+  robots_txt: https://williesreserve.com/robots.txt
+  ucp_versions:
+  - '2026-08-25'
+  - '2026-04-08'
+  - '2026-01-23'
+  canonical_endpoint_in_profile: https://5qwrii-j7.myshopify.com/api/ucp/mcp
+  note: >-
+    The UCP profile advertises the endpoint on the store's myshopify.com canonical host; the
+    store's own agents.md and robots.txt advertise the same endpoint on williesreserve.com,
+    and that URL was the one probed and confirmed working.
+raw:
+  tools_list: mcp/willie-s-reserve-mcp-tools-list.json
+  fetched: '2026-09-04'
+  http_status: 200
+tool_count: 13
+tools:
+- name: search_catalog
+  category: catalog
+  mutating: false
+  summary: Natural-language or filtered product search over this store's catalog; paginated by cursor. Conforms to dev.ucp.shopping.catalog.search.
+- name: lookup_catalog
+  category: catalog
+  mutating: false
+  summary: Look up multiple products or variants by identifier. Conforms to dev.ucp.shopping.catalog.lookup.
+- name: get_product
+  category: catalog
+  mutating: false
+  summary: Retrieve complete product detail by identifier; returns a single product.
+- name: create_cart
+  category: cart
+  mutating: true
+  summary: Creates a new cart from line items.
+- name: get_cart
+  category: cart
+  mutating: false
+  summary: Get the cart contents by cart id.
+- name: update_cart
+  category: cart
+  mutating: true
+  summary: Perform updates to a cart (line items, buyer, context, discounts).
+- name: cancel_cart
+  category: cart
+  mutating: true
+  reversal_of: create_cart
+  summary: Cancels a cart.
+- name: create_checkout
+  category: checkout
+  mutating: true
+  summary: Creates a checkout, optionally from a cart_id; returns line items, totals, discounts and taxes.
+- name: get_checkout
+  category: checkout
+  mutating: false
+  summary: Returns checkout details including line items, totals, discounts and taxes.
+- name: update_checkout
+  category: checkout
+  mutating: true
+  summary: Updates a checkout (payment instruments, fulfillment methods and destinations, buyer, discounts).
+- name: complete_checkout
+  category: checkout
+  mutating: true
+  idempotency_key: meta.idempotency-key
+  summary: Completes a checkout and returns the completed checkout result. The only tool that accepts an idempotency key.
+- name: cancel_checkout
+  category: checkout
+  mutating: true
+  reversal_of: create_checkout
+  summary: Cancels a checkout.
+- name: get_order
+  category: order
+  mutating: false
+  summary: Get the details of an order.
+governance:
+  human_approval_required: true
+  note: >-
+    Both /llms.txt and /robots.txt state that checkout, payment and order placement must not be
+    completed automatically without explicit, contemporaneous human approval; agents transacting
+    on a buyer's behalf are directed to UCP/MCP or the Shop skill, both of which require buyer
+    approval before payment.
+  source: https://williesreserve.com/robots.txt
+prices:
+  units: ISO 4217 minor units
+  shape: '{"amount": <int>, "currency": "<ISO 4217>"}'
+  note: Documented in every tool description; agents must convert to major units before quoting a buyer.

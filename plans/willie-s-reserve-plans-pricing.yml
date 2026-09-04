@@ -1,0 +1,25 @@
+generated: '2026-09-04'
+method: searched
+source: https://williesreserve.com/
+description: >-
+  Willie's Reserve is a consumer cannabis brand running a direct-to-consumer storefront. It sells
+  products, not API access: there is no developer plan, tier, quota or metered API pricing page
+  anywhere on its surface, and its agent commerce endpoint is free and anonymous to call.
+plan_count: 0
+plans: []
+pricing_model: none-for-api
+product_pricing:
+  present: true
+  surface: https://williesreserve.com/collections/all
+  note: >-
+    Retail product prices are published per product and are readable through the UCP/MCP
+    search_catalog and get_product tools, expressed in ISO 4217 minor units. That is merchandise
+    pricing, not API pricing, and is deliberately not recorded as plans.
+api_access_cost: free
+evidence:
+- url: https://williesreserve.com/
+  status: 200
+- url: https://williesreserve.com/api/ucp/mcp
+  status: 200
+  note: tools/list succeeded with no account, key or payment.
+checked: '2026-09-04'

@@ -1,0 +1,78 @@
+generated: '2026-09-04'
+method: probed
+source: https://williesreserve.com/.well-known/
+description: >-
+  Named-path probe of every host this record knows: the registrable domain, its www host, and the
+  store's canonical myshopify.com host. Three documents are served (the UCP merchant profile and
+  the OpenID Connect / OAuth authorization-server metadata for Shopify customer accounts); the
+  remaining paths 404 with the storefront's HTML 404 page.
+hosts:
+- host: williesreserve.com
+  documents:
+  - path: /.well-known/ucp
+    status: 200
+    file: well-known/willie-s-reserve-ucp.json
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: well-known/willie-s-reserve-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: well-known/willie-s-reserve-oauth-authorization-server.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: www.williesreserve.com
+  documents:
+  - path: /.well-known/ucp
+    status: 200
+  - path: /.well-known/openid-configuration
+    status: 200
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  note: www redirects to the apex host; the same documents are served.
+- host: 5qwrii-j7.myshopify.com
+  documents:
+  - path: /.well-known/ucp
+    status: 200
+  - path: /.well-known/openid-configuration
+    status: 200
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  note: >-
+    The store's canonical Shopify host, named as merchant origin inside the UCP profile's
+    supported_versions and service endpoints.
+other_agent_documents:
+- url: https://williesreserve.com/llms.txt
+  status: 200
+  file: llms/willie-s-reserve-llms.txt
+- url: https://williesreserve.com/agents.md
+  status: 200
+  file: skills/willie-s-reserve-agents.md
+- url: https://williesreserve.com/robots.txt
+  status: 200
+  note: Carries agent-directed policy comments naming the UCP discovery and MCP endpoints.
+- url: https://williesreserve.com/sitemap_agentic_discovery.xml
+  status: 200
+  note: A dedicated agentic-discovery sitemap whose single entry is /agents.md.
+checked: '2026-09-04'

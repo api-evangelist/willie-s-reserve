@@ -1,0 +1,24 @@
+generated: '2026-09-04'
+method: probed
+source: https://williesreserve.com/.well-known/openid-configuration
+description: >-
+  OAuth 2.0 / OpenID Connect scopes advertised by the store's customer-account authorization
+  server, read from the scopes_supported array of the discovery document served on the company's
+  own domain. Derived from no OpenAPI — this store publishes none — so every value here is
+  verbatim from the provider's discovery document.
+issuer: https://shopify.com/authentication/59591163950
+scope_count: 4
+scopes:
+- name: openid
+  description: Standard OpenID Connect scope requesting an ID token for the authenticated customer.
+- name: email
+  description: Releases the customer's email and email_verified claims.
+- name: customer-account-api:full
+  description: Full access to the customer-account API for the authenticated customer.
+- name: customer-account-mcp-api:full
+  description: >-
+    Full access to the customer-account MCP API — the authenticated counterpart to the anonymous
+    UCP/MCP storefront endpoint, covering the signed-in customer's own account context.
+note: >-
+  These scopes govern the customer-account surface only. The anonymous UCP/MCP endpoint at
+  /api/ucp/mcp requires no scope and no token.
