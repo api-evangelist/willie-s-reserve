@@ -23,6 +23,16 @@ tags:
 - Cannabis
 - Consumer Products
 - Retail
+- E-Commerce
+- Agent Commerce
+- MCP
+- Universal Commerce Protocol
+- Shopify
+tags_raw:
+- Company
+- Cannabis
+- Consumer Products
+- Retail
 - Ecommerce
 - Agent Commerce
 - Model Context Protocol
@@ -39,6 +49,15 @@ apis:
   baseURL: https://williesreserve.com/api/ucp/mcp
   image: https://williesreserve.com/cdn/shop/files/Willies_Reserve_Logo_Registered_3b1bc386-c7d8-4a5e-bba7-06a4c76be9e4.png?v=1773762321
   tags:
+  - Agent Commerce
+  - MCP
+  - Universal Commerce Protocol
+  - E-Commerce
+  - Catalog
+  - Cart
+  - Checkout
+  - Order
+  tags_raw:
   - Agent Commerce
   - Model Context Protocol
   - Universal Commerce Protocol
