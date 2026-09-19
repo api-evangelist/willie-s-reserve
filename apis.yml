@@ -24,7 +24,7 @@ tags:
 - Consumer Products
 - Retail
 - E-Commerce
-- Agent Commerce
+- Agentic Commerce
 - MCP
 - Universal Commerce Protocol
 - Shopify
@@ -49,7 +49,7 @@ apis:
   baseURL: https://williesreserve.com/api/ucp/mcp
   image: https://williesreserve.com/cdn/shop/files/Willies_Reserve_Logo_Registered_3b1bc386-c7d8-4a5e-bba7-06a4c76be9e4.png?v=1773762321
   tags:
-  - Agent Commerce
+  - Agentic Commerce
   - MCP
   - Universal Commerce Protocol
   - E-Commerce
