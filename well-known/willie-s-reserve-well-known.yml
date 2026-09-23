@@ -1,23 +1,22 @@
 generated: '2026-09-04'
 method: probed
 source: https://williesreserve.com/.well-known/
-description: >-
-  Named-path probe of every host this record knows: the registrable domain, its www host, and the
-  store's canonical myshopify.com host. Three documents are served (the UCP merchant profile and
-  the OpenID Connect / OAuth authorization-server metadata for Shopify customer accounts); the
-  remaining paths 404 with the storefront's HTML 404 page.
+description: 'Named-path probe of every host this record knows: the registrable domain, its www host,
+  and the store''s canonical myshopify.com host. Three documents are served (the UCP merchant profile
+  and the OpenID Connect / OAuth authorization-server metadata for Shopify customer accounts); the remaining
+  paths 404 with the storefront''s HTML 404 page.'
 hosts:
 - host: williesreserve.com
   documents:
   - path: /.well-known/ucp
     status: 200
-    file: well-known/willie-s-reserve-ucp.json
+    file: willie-s-reserve-ucp.json
   - path: /.well-known/openid-configuration
     status: 200
-    file: well-known/willie-s-reserve-openid-configuration.json
+    file: willie-s-reserve-openid-configuration.json
   - path: /.well-known/oauth-authorization-server
     status: 200
-    file: well-known/willie-s-reserve-oauth-authorization-server.json
+    file: willie-s-reserve-oauth-authorization-server.json
   - path: /.well-known/security.txt
     status: 404
   - path: /.well-known/api-catalog
@@ -59,9 +58,8 @@ hosts:
     status: 404
   - path: /.well-known/agent-card.json
     status: 404
-  note: >-
-    The store's canonical Shopify host, named as merchant origin inside the UCP profile's
-    supported_versions and service endpoints.
+  note: The store's canonical Shopify host, named as merchant origin inside the UCP profile's supported_versions
+    and service endpoints.
 other_agent_documents:
 - url: https://williesreserve.com/llms.txt
   status: 200
