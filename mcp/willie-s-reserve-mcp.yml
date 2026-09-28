@@ -4,19 +4,16 @@ source: https://williesreserve.com/api/ucp/mcp
 name: Willie's Reserve Commerce MCP Server (UCP)
 slug: willie-s-reserve-mcp
 status: live
-description: >-
-  Willie's Reserve serves a live, anonymously reachable Model Context Protocol server at
-  https://williesreserve.com/api/ucp/mcp implementing the Universal Commerce Protocol (UCP)
-  shopping service. A tools/list call returned 13 real tools with full JSON Schema inputs
-  covering catalog search and lookup, cart lifecycle, checkout lifecycle and order retrieval
-  for this store's own product catalog.
+description: Willie's Reserve serves a live, anonymously reachable Model Context Protocol server at https://williesreserve.com/api/ucp/mcp
+  implementing the Universal Commerce Protocol (UCP) shopping service. A tools/list call returned 13 real
+  tools with full JSON Schema inputs covering catalog search and lookup, cart lifecycle, checkout lifecycle
+  and order retrieval for this store's own product catalog.
 ownership:
-  note: >-
-    The endpoint is provisioned by Shopify (serverInfo.name "universal-commerce") but it is
-    store-scoped and served from the company's own domain. The UCP merchant profile at
-    /.well-known/ucp names merchant_name "Willie's Reserve", merchant_origin
-    "williesreserve.com" and gatewayMerchantId 59591163950 (the same shop id the storefront
-    reports), so the surface belongs to this company even though the runtime is platform code.
+  note: The endpoint is provisioned by Shopify (serverInfo.name "universal-commerce") but it is store-scoped
+    and served from the company's own domain. The UCP merchant profile at /.well-known/ucp names merchant_name
+    "Willie's Reserve", merchant_origin "williesreserve.com" and gatewayMerchantId 59591163950 (the same
+    shop id the storefront reports), so the surface belongs to this company even though the runtime is
+    platform code.
   evidence: https://williesreserve.com/.well-known/ucp
 deployment:
   mode: remote
@@ -43,9 +40,8 @@ protocol:
   content_type: application/json
   accept: application/json, text/event-stream
   method: POST only
-  get_behavior: >-
-    A plain GET on the endpoint returns the storefront's HTML 404 page. The endpoint answers only
-    JSON-RPC POSTs; a liveness check that uses GET will read as dead and is wrong.
+  get_behavior: A plain GET on the endpoint returns the storefront's HTML 404 page. The endpoint answers
+    only JSON-RPC POSTs; a liveness check that uses GET will read as dead and is wrong.
 discovery:
   ucp_profile: https://williesreserve.com/.well-known/ucp
   agents_md: https://williesreserve.com/agents.md
@@ -56,10 +52,9 @@ discovery:
   - '2026-04-08'
   - '2026-01-23'
   canonical_endpoint_in_profile: https://5qwrii-j7.myshopify.com/api/ucp/mcp
-  note: >-
-    The UCP profile advertises the endpoint on the store's myshopify.com canonical host; the
-    store's own agents.md and robots.txt advertise the same endpoint on williesreserve.com,
-    and that URL was the one probed and confirmed working.
+  note: The UCP profile advertises the endpoint on the store's myshopify.com canonical host; the store's
+    own agents.md and robots.txt advertise the same endpoint on williesreserve.com, and that URL was the
+    one probed and confirmed working.
 raw:
   tools_list: mcp/willie-s-reserve-mcp-tools-list.json
   fetched: '2026-09-04'
@@ -69,67 +64,132 @@ tools:
 - name: search_catalog
   category: catalog
   mutating: false
-  summary: Natural-language or filtered product search over this store's catalog; paginated by cursor. Conforms to dev.ucp.shopping.catalog.search.
+  summary: Natural-language or filtered product search over this store's catalog; paginated by cursor.
+    Conforms to dev.ucp.shopping.catalog.search.
+  description: Search for products from the online store, hosted on Shopify.  This tool can be used to
+    search for products using natural language queries, specific filter criteria, or both. At least one
+    of query or filters must be provided.  Results are paginated, with initial results limited to improve
+    experience. Use the pagination.cursor from the response to fetch additional pages when users request
+    more resu…
 - name: lookup_catalog
   category: catalog
   mutating: false
   summary: Look up multiple products or variants by identifier. Conforms to dev.ucp.shopping.catalog.lookup.
+  description: 'Look up multiple products or variants by identifier. Use this tool to resolve multiple
+    product/variant IDs in a single request.  Supports: - Product IDs (gid://shopify/Product/...): Returns
+    product with match: "featured" - Variant IDs (gid://shopify/ProductVariant/...): Returns parent product
+    with the exact variant  Results are grouped by product. Each variant includes an inputs array showing
+    whic…'
 - name: get_product
   category: catalog
   mutating: false
   summary: Retrieve complete product detail by identifier; returns a single product.
+  description: Retrieve complete product detail by identifier. Returns a singular product with a relevant
+    set of variants, exact pricing, and real-time availability. Supports interactive option selection
+    via selected and preferences parameters for variant narrowing and availability signals. Use for product
+    detail page rendering and purchase decisions.  Prices in the response are integers in the currency's
+    ISO 42…
 - name: create_cart
   category: cart
   mutating: true
   summary: Creates a new cart from line items.
+  description: 'Creates a new cart  Prices in the response are integers in the currency''s ISO 4217 minor
+    units, paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount": 2500,
+    "currency": "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide by
+    100 for two-decimal currencies such as USD and EUR; zero-decimal currencies such as JPY are already
+    whole units)…'
 - name: get_cart
   category: cart
   mutating: false
   summary: Get the cart contents by cart id.
+  description: 'Get the cart contents  Prices in the response are integers in the currency''s ISO 4217
+    minor units, paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount":
+    2500, "currency": "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide
+    by 100 for two-decimal currencies such as USD and EUR; zero-decimal currencies such as JPY are already
+    whole uni…'
 - name: update_cart
   category: cart
   mutating: true
   summary: Perform updates to a cart (line items, buyer, context, discounts).
+  description: 'Perform updates to a cart.  Prices in the response are integers in the currency''s ISO
+    4217 minor units, paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount":
+    2500, "currency": "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide
+    by 100 for two-decimal currencies such as USD and EUR; zero-decimal currencies such as JPY are already
+    whol…'
 - name: cancel_cart
   category: cart
   mutating: true
   reversal_of: create_cart
   summary: Cancels a cart.
+  description: 'Cancels a cart.  Prices in the response are integers in the currency''s ISO 4217 minor
+    units, paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount": 2500,
+    "currency": "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide by
+    100 for two-decimal currencies such as USD and EUR; zero-decimal currencies such as JPY are already
+    whole units).'
 - name: create_checkout
   category: checkout
   mutating: true
   summary: Creates a checkout, optionally from a cart_id; returns line items, totals, discounts and taxes.
+  description: 'Creates a checkout. Returns checkout details, including line items, totals, and any applicable
+    discounts or taxes.  Prices in the response are integers in the currency''s ISO 4217 minor units,
+    paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount": 2500, "currency":
+    "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide by 100 for two-deci…'
 - name: get_checkout
   category: checkout
   mutating: false
   summary: Returns checkout details including line items, totals, discounts and taxes.
+  description: 'Returns details about the checkout, including line items, totals, and any applicable discounts
+    or taxes.  Prices in the response are integers in the currency''s ISO 4217 minor units, paired with
+    a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount": 2500, "currency": "USD"}
+    is $25.00. Convert to major units before quoting a price to a buyer (divide by 100 for two-decimal
+    curren…'
 - name: update_checkout
   category: checkout
   mutating: true
   summary: Updates a checkout (payment instruments, fulfillment methods and destinations, buyer, discounts).
+  description: 'Updates a checkout. Returns checkout details, including line items, totals, and any applicable
+    discounts or taxes.  Prices in the response are integers in the currency''s ISO 4217 minor units,
+    paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount": 2500, "currency":
+    "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide by 100 for two-deci…'
 - name: complete_checkout
   category: checkout
   mutating: true
   idempotency_key: meta.idempotency-key
-  summary: Completes a checkout and returns the completed checkout result. The only tool that accepts an idempotency key.
+  summary: Completes a checkout and returns the completed checkout result. The only tool that accepts
+    an idempotency key.
+  description: 'Completes a checkout and returns the checkout result. Returns details about the completed
+    checkout, including order ID, Thank You Page URL, or any errors encountered.  Prices in the response
+    are integers in the currency''s ISO 4217 minor units, paired with a currency code: {"amount": 600,
+    "currency": "USD"} is $6.00 and {"amount": 2500, "currency": "USD"} is $25.00. Convert to major units
+    before qu…'
 - name: cancel_checkout
   category: checkout
   mutating: true
   reversal_of: create_checkout
   summary: Cancels a checkout.
+  description: 'Cancels a checkout.  Prices in the response are integers in the currency''s ISO 4217 minor
+    units, paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount": 2500,
+    "currency": "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide by
+    100 for two-decimal currencies such as USD and EUR; zero-decimal currencies such as JPY are already
+    whole units…'
 - name: get_order
   category: order
   mutating: false
   summary: Get the details of an order.
+  description: 'Get the details of an order  Prices in the response are integers in the currency''s ISO
+    4217 minor units, paired with a currency code: {"amount": 600, "currency": "USD"} is $6.00 and {"amount":
+    2500, "currency": "USD"} is $25.00. Convert to major units before quoting a price to a buyer (divide
+    by 100 for two-decimal currencies such as USD and EUR; zero-decimal currencies such as JPY are already
+    who…'
 governance:
   human_approval_required: true
-  note: >-
-    Both /llms.txt and /robots.txt state that checkout, payment and order placement must not be
-    completed automatically without explicit, contemporaneous human approval; agents transacting
-    on a buyer's behalf are directed to UCP/MCP or the Shop skill, both of which require buyer
-    approval before payment.
+  note: Both /llms.txt and /robots.txt state that checkout, payment and order placement must not be completed
+    automatically without explicit, contemporaneous human approval; agents transacting on a buyer's behalf
+    are directed to UCP/MCP or the Shop skill, both of which require buyer approval before payment.
   source: https://williesreserve.com/robots.txt
 prices:
   units: ISO 4217 minor units
   shape: '{"amount": <int>, "currency": "<ISO 4217>"}'
   note: Documented in every tool description; agents must convert to major units before quoting a buyer.
+descriptions_source: live tools/list (authorship probe or saved capture); filled by backfill-tools-from-authorship.py
+  --descriptions, 2026-09-28
